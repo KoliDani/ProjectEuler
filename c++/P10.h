@@ -8,11 +8,10 @@ Find the sum of all the primes below two million.
 bool isPrime(long long n);
 
 long long Problem() {
-
 	long limit = 2000000;
 	long k = 5;
 	long long sum = 2 + 3;
-	while (k < 2000000) {
+	while (k < limit) {
 		if (isPrime(k)) {
 			sum += k;
 		}
