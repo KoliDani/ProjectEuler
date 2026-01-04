@@ -111,34 +111,46 @@ Work out the first ten digits of the sum of the following one - hundred 50 - dig
 
 std::vector<std::vector<int>> fileread();
 std::vector<int> num2vector(long long n);
-void fillFromIndex(std::vector<int> &result, long long add, int index);
+void addToResult(std::vector<int>& result, int index, long long n);
+long long getFirst10Digits(std::vector<int>& n);
 
 long long Problem() {
-
     std::vector<std::vector<int>> numbers = fileread();
-    std::vector<int> result;
-
     for (int i = 0; i < numbers.size(); i++) {
         reverse(numbers[i].begin(), numbers[i].end());
     }
 
-    for (int j = 0; j < 1; j++) {
-        long long sum = 0;
+    std::vector<int> result(100, 0);
+    std::vector<int> digits;
+
+    for (int j = 0; j < numbers[0].size(); j++) {
         for (int i = 0; i < numbers.size(); i++) {
-            sum += numbers[i][j];
-            std::cout << numbers[i][j];
+            addToResult(result, j, numbers[i][j]);
         }
-
-        
-        fillFromIndex(result, sum, j);
-
-        std::cout << std::endl << sum << std::endl;
     }
 
+	return getFirst10Digits(result);
+}
 
-    std::cout << std::endl;
+void addToResult(std::vector<int>& result, int index, long long n) {
+    long long tmp;
+    int addIndex = 0;
+    std::vector<int> digits = num2vector(n);
+    for (int k = 0; k < digits.size(); k++) {
+        addIndex = index + k;
+        if (addIndex > result.size()) {
+            for (int j = 0; j < addIndex - result.size(); j++) {
+                result.push_back(0);
+            }
+        }
 
-	return 0;
+        result[addIndex] += digits[k];
+        if (result[addIndex] >= 10) {
+            tmp = result[addIndex];
+            result[addIndex] = 0;
+            addToResult(result, addIndex, tmp);
+        }
+    }
 }
 
 std::vector<std::vector<int>> fileread() {
@@ -164,6 +176,7 @@ std::vector<std::vector<int>> fileread() {
             digits.clear();
         }
     }
+    numbers.push_back(digits);
 
     return numbers;
 }
@@ -177,14 +190,19 @@ std::vector<int> num2vector(long long n) {
     return digits;
 }
 
-void fillFromIndex(std::vector<int> &result, long long add, int index) {
-    std::vector<int> addDigits = num2vector(add);
-    if (result.size() < index + 1) {
-        result.push_back(0);
+long long getFirst10Digits(std::vector<int>& n) {
+    long long result = 0;
+    int notZeroCounter = 0;
+    for (int i = n.size() - 1; i >= 0; i--) {
+        if (notZeroCounter == 10) {
+            return result;
+        }
+        if (n[i] != 0 || notZeroCounter != 0) {
+            result *= 10;
+            result += n[i];
+            notZeroCounter++;
+        }
     }
 
-
-
-
-
+    return result;
 }
