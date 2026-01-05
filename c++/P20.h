@@ -12,7 +12,6 @@ Find the sum of the digits in the number 100!.
 std::vector<int> num2vector(int n);
 
 int Problem() {
-
 	std::vector<int> number(1000, 0);
 	std::vector<int> digits;
 	int lastIndex = 1;
